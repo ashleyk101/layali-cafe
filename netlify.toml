@@ -1,0 +1,9 @@
+# Netlify: publish only the website folder (no build step needed).
+[build]
+  publish = "site"
+
+# Let browsers cache images; the ?v= numbers on styles.css/script.js handle updates.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
