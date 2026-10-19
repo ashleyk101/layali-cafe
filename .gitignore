@@ -1,0 +1,17 @@
+# Original full-size photos (large, and some show customers).
+# The website uses the cropped, resized copies in site/images.
+/IMG_*.jpeg
+/IMG_*.jpg
+
+# Local tooling
+.claude/settings.local.json
+.netlify/
+node_modules/
+
+# OS clutter
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Design-tool cache
+.impeccable/

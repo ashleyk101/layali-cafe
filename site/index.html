@@ -1,0 +1,855 @@
+<!doctype html>
+<!-- data-ordering="off" hides WhatsApp ordering until the real number is in script.js. Change to "on" to enable. -->
+<html lang="en" data-ordering="off">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layali · Neighbourhood Café in South C</title>
+  <meta name="description" content="Layali (ليالي) is a cosy neighbourhood café at Magharibi Place, South C, Nairobi. Signature milkshakes, iced lattes, matcha, waffles and smoothie bowls.">
+  <meta name="theme-color" content="#EDE3D1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Link previews (WhatsApp, Instagram, etc.). PLACEHOLDER: once the site has a domain,
+       change og:image to the full address, e.g. https://layali.co.ke/og-image.jpg -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Layali">
+  <meta property="og:title" content="Layali · Your favourite neighbourhood café">
+  <meta property="og:description" content="Signature shakes, iced lattes, matcha and waffles at Magharibi Place, South C, Nairobi.">
+  <meta property="og:image" content="og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script>
+    // Pick day/night before first paint: saved choice, otherwise Nairobi time.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("layali-theme"); } catch (e) {}
+      if (t !== "day" && t !== "night") {
+        var h = +new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Nairobi", hour: "numeric", hourCycle: "h23" }).format(new Date());
+        t = h >= 19 || h < 6 ? "night" : "day";
+      }
+      document.documentElement.dataset.theme = t;
+      document.documentElement.classList.add("js");
+      // Opening animation: once per visit, never with reduced motion
+      var seen = false;
+      try { seen = sessionStorage.getItem("layali-intro") === "1"; } catch (e) {}
+      if (!seen && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("intro");
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@500;700&family=Montserrat:wght@400;500;600&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=7">
+</head>
+<body>
+
+  <!-- OPENING ANIMATION (only shown when <html> has the "intro" class) -->
+  <div class="intro-overlay" data-intro>
+    <div class="intro-stage" aria-hidden="true">
+      <svg class="illus intro-lantern" viewBox="0 0 120 200"><use href="#i-lantern"/></svg>
+      <svg class="intro-ar" viewBox="0 0 440 230"><text x="220" y="150" text-anchor="middle">ليالي</text></svg>
+      <svg class="logo intro-logo" viewBox="0 0 412 112"><use href="#logo-wordmark"/></svg>
+    </div>
+    <button type="button" class="intro-skip" data-intro-skip>Skip intro</button>
+  </div>
+
+  <header class="nav" id="top">
+    <a href="#top" class="wordmark" aria-label="Layali home">
+      <svg class="logo" viewBox="0 0 412 112" aria-hidden="true"><use href="#logo-wordmark"/></svg>
+      <span class="wordmark-ar" lang="ar">ليالي</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#menu">Menu</a>
+      <a href="#finder">Drink finder</a>
+      <a href="#notes">Notes</a>
+      <a href="#play">Play</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Night mode">
+        <svg class="illus lantern-icon" viewBox="0 0 120 200" aria-hidden="true"><use href="#i-lantern"/></svg>
+        <span class="theme-label" data-theme-label>Night</span>
+      </button>
+      <button class="btn btn-ink nav-order" type="button" data-open-order>
+        Order <span class="order-count" data-order-count hidden>0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO (backlit sandstone panel) -->
+    <section class="hero sandstone">
+      <!-- Night sky: only visible in night mode. Moon shows tonight's real phase. -->
+      <div class="night-sky" aria-hidden="true">
+        <div class="stars" data-stars></div>
+        <span class="shooting-star"></span>
+        <figure class="moon-wrap">
+          <svg class="moon" viewBox="0 0 100 100" data-moon></svg>
+          <figcaption class="moon-label" data-moon-label></figcaption>
+        </figure>
+      </div>
+      <svg class="illus hero-lantern" viewBox="0 0 120 200" aria-hidden="true"><use href="#i-lantern"/></svg>
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot" data-open-dot></span><span data-open-status>Open daily · 8:00am – 9:30pm</span></p>
+        <h1>Your favourite neighbourhood&nbsp;café.</h1>
+        <p class="lede">Signature shakes, iced lattes, matcha and Lotus Biscoff waffles. Made to order at Magharibi Place, South C.</p>
+        <div class="hero-actions">
+          <a href="#menu" class="btn btn-ink">See the menu</a>
+          <button type="button" class="btn btn-line" data-open-order>Order on WhatsApp</button>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <svg class="illus hero-palm" viewBox="0 0 160 220" aria-hidden="true"><use href="#i-palm"/></svg>
+        <div class="arch">
+          <img src="images/hero-iced-coffee.jpg" alt="An iced coffee in a Layali cup on a wooden coaster, under the backlit ليالي sign on the sandstone wall" width="900" height="1125">
+        </div>
+        <span class="hero-ar" lang="ar" aria-hidden="true">ليالي</span>
+        <p class="hero-note">do it for<br>the plot ♥</p>
+      </figure>
+    </section>
+
+    <!-- FAVOURITES STRIP -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Lotus Biscoff shake</span><i>♥</i><span>Iced Tiramisu latte</span><i>♥</i><span>Matcha misu</span><i>♥</i><span>Strawberry mojito</span><i>♥</i><span>Pistachio shake</span><i>♥</i><span>Iced Caramel latte</span><i>♥</i>
+        <span>Lotus Biscoff shake</span><i>♥</i><span>Iced Tiramisu latte</span><i>♥</i><span>Matcha misu</span><i>♥</i><span>Strawberry mojito</span><i>♥</i><span>Pistachio shake</span><i>♥</i><span>Iced Caramel latte</span><i>♥</i>
+      </div>
+    </div>
+
+    <!-- SIGNATURES -->
+    <section class="signatures" aria-labelledby="sig-title">
+      <div class="section-head" data-reveal>
+        <h2 id="sig-title">What people come back for</h2>
+      </div>
+      <ul class="sig-grid">
+        <li class="sig" data-reveal>
+          <a href="#menu" data-jump="eats" class="sig-link">
+            <div class="sig-img"><svg class="illus wobble" viewBox="0 0 200 200" role="img" aria-label="Illustration of a Lotus Biscoff waffle"><use href="#i-waffle"/></svg></div>
+            <h3>Waffles</h3><p>KES 450</p>
+          </a>
+        </li>
+        <li class="sig" data-reveal>
+          <a href="#menu" data-jump="drinks" class="sig-link">
+            <div class="sig-img"><svg class="illus wobble" viewBox="0 0 200 220" role="img" aria-label="Illustration of a Lotus Biscoff milkshake with a biscuit in the cream"><use href="#i-lotus"/><use href="#i-drip" class="drip"/></svg></div>
+            <h3>Milkshakes</h3><p>from KES 150</p>
+          </a>
+        </li>
+        <li class="sig" data-reveal>
+          <a href="#menu" data-jump="drinks" class="sig-link">
+            <div class="sig-img"><svg class="illus clink" viewBox="0 0 200 220" role="img" aria-label="Illustration of a matcha misu with a ladyfinger biscuit on the lid"><use href="#i-matchamisu"/><use href="#i-drip" class="drip"/></svg></div>
+            <h3>Matcha</h3><p>from KES 500</p>
+          </a>
+        </li>
+        <li class="sig" data-reveal>
+          <a href="#menu" data-jump="drinks" class="sig-link">
+            <div class="sig-img"><svg class="illus clink" viewBox="0 0 200 220" role="img" aria-label="Illustration of an iced caramel latte"><use href="#i-caramel"/><use href="#i-drip" class="drip"/></svg></div>
+            <h3>Iced coffee</h3><p>from KES 300</p>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- REAL PHOTOS -->
+    <section class="photos" aria-labelledby="photos-title">
+      <div class="photos-head" data-reveal>
+        <div>
+          <p class="kicker">Straight from the counter</p>
+          <h2 id="photos-title">The real thing.</h2>
+        </div>
+        <div class="rail-nav">
+          <button type="button" class="icon-btn" data-rail-prev aria-label="Previous photos">←</button>
+          <button type="button" class="icon-btn" data-rail-next aria-label="Next photos">→</button>
+        </div>
+      </div>
+      <ul class="photo-rail" data-rail>
+        <li class="photo-card">
+          <button type="button" class="ph" data-zoom><img src="images/lotus-waffle.jpg" alt="Lotus Biscoff waffle in a box, topped with a scoop of vanilla ice cream, Biscoff crumbs and a Lotus biscuit" loading="lazy" width="900" height="750"></button>
+          <div class="cap">
+            <h3>Lotus Biscoff waffle</h3>
+            <p>Biscoff drizzle, crumbs, a scoop of ice cream and a biscuit on top.</p>
+            <div class="cap-row"><span class="muted small">KES 450</span><button type="button" class="add add-wide" data-add data-name="Lotus biscoff waffle" data-size="" data-price="450" aria-label="Add Lotus biscoff waffle, KES 450">Add</button></div>
+          </div>
+        </li>
+        <li class="photo-card">
+          <button type="button" class="ph" data-zoom><img src="images/matcha-misu.jpg" alt="Matcha misu in a Layali cup with mascarpone cream on top and a ladyfinger biscuit resting on the rim" loading="lazy" width="600" height="969"></button>
+          <div class="cap">
+            <h3>Matcha misu <span class="heart" aria-label="Founder's favourite">♥</span></h3>
+            <p>Layers of cream over matcha, finished with a ladyfinger.</p>
+            <div class="cap-row"><span class="muted small">KES 650</span><button type="button" class="add add-wide" data-add data-name="Matcha misu" data-size="" data-price="650" aria-label="Add Matcha misu, KES 650">Add</button></div>
+          </div>
+        </li>
+        <li class="photo-card">
+          <button type="button" class="ph" data-zoom><img src="images/milkshakes.jpg" alt="A row of thick milkshakes in Layali cups with dome lids" loading="lazy" width="800" height="941"></button>
+          <div class="cap">
+            <h3>Signature milkshakes</h3>
+            <p>Lotus Biscoff, Oreo, mint choc, brownie and coffee. Thick enough to need the straw.</p>
+            <div class="cap-row"><span class="muted small">from KES 250</span><a href="#menu" class="btn-mini" data-jump="drinks">See shakes</a></div>
+          </div>
+        </li>
+        <li class="photo-card">
+          <button type="button" class="ph" data-zoom><img src="images/iced-coffee-top.jpg" alt="Two iced coffees seen from above under the glowing blue ليالي sign" loading="lazy" width="800" height="991"></button>
+          <div class="cap">
+            <h3>Iced coffee</h3>
+            <p>"The iced coffee was 👌", from a customer's story.</p>
+            <div class="cap-row"><span class="muted small">from KES 300</span><a href="#menu" class="btn-mini" data-jump="drinks">See iced coffee</a></div>
+          </div>
+        </li>
+        <li class="photo-card">
+          <button type="button" class="ph" data-zoom><img src="images/waffle-matcha.jpg" alt="A Lotus Biscoff waffle with a cup of vanilla ice cream and an iced matcha" loading="lazy" width="900" height="924"></button>
+          <div class="cap">
+            <h3>Waffle &amp; matcha date</h3>
+            <p>A Biscoff waffle, extra ice cream on the side and an iced matcha. Bring a friend.</p>
+            <div class="cap-row"><span class="muted small">KES 450 + 500</span><a href="#menu" class="btn-mini" data-jump="eats">See waffles</a></div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- DRINK FINDER -->
+    <section class="finder" id="finder" aria-labelledby="finder-title">
+      <div class="finder-card" data-reveal>
+        <div class="finder-head">
+          <p class="kicker">Drink finder</p>
+          <h2 id="finder-title">Not sure what to get?</h2>
+          <p class="muted">Answer a few quick questions and we'll pick something for you.</p>
+        </div>
+        <div class="finder-body" data-finder aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu" id="menu" aria-labelledby="menu-title">
+      <div class="menu-head">
+        <p class="menu-kicker">Layali</p>
+        <h2 id="menu-title" class="menu-title">Menu</h2>
+        <div class="tabs" role="tablist" aria-label="Menu sections">
+          <button role="tab" id="tab-drinks" aria-controls="panel-drinks" aria-selected="true" class="tab">drinks</button>
+          <button role="tab" id="tab-eats" aria-controls="panel-eats" aria-selected="false" class="tab" tabindex="-1">eats</button>
+        </div>
+      </div>
+      <p class="menu-legend"><span class="heart">♥</span> founder's favourite <span class="sep">·</span> prices in KES <span class="order-only"><span class="sep">·</span> tap <span class="plus-demo">+</span> to add to your order</span></p>
+
+      <div id="panel-drinks" role="tabpanel" aria-labelledby="tab-drinks" class="menu-panel" data-panel="drinks"></div>
+      <div id="panel-eats" role="tabpanel" aria-labelledby="tab-eats" class="menu-panel" data-panel="eats" hidden></div>
+    </section>
+
+    <!-- STORY (backlit sandstone panel) -->
+    <section class="story sandstone" id="story" aria-labelledby="story-title">
+      <figure class="story-img" data-reveal>
+        <img src="images/lantern-wall.jpg" alt="Inside Layali: a woven rug, an old lantern and a kiondo basket beside the backlit sandstone panels" loading="lazy" width="1000" height="949">
+      </figure>
+      <div class="story-copy" data-reveal>
+        <p class="story-ar" lang="ar">ليالي <span>· nights</span></p>
+        <h2 id="story-title">A small room with a big welcome.</h2>
+        <!-- PLACEHOLDER: replace with the founder's real story -->
+        <p>Layali means "nights" in Arabic, and it's named for the long evenings spent with family and friends over something sweet and something warm. We wanted South C to have a place that feels the same way.</p>
+        <p>The room is filled with woven baskets, old lanterns, hand-painted plates and a kilim from home. The menu has drinks our founder grew up loving next to new favourites. Pull up, say hi, and stay a while.</p>
+        <p class="signoff">— The Layali family</p>
+      </div>
+    </section>
+
+    <!-- NOTES DOOR -->
+    <section class="notes" id="notes" aria-labelledby="notes-title">
+      <div class="notes-copy" data-reveal>
+        <h2 id="notes-title">The door is covered in your notes.</h2>
+        <p>Our front door is covered in sticky notes from customers, from doodles to thank-yous to little secrets. Leave one here too.</p>
+        <form class="note-form" data-note-form>
+          <label for="note-text">Your note</label>
+          <textarea id="note-text" name="text" maxlength="80" rows="3" required placeholder="best karak in South C…"></textarea>
+          <div class="note-meta">
+            <fieldset class="swatches">
+              <legend class="sr-only">Note colour</legend>
+              <label class="swatch n-yellow"><input type="radio" name="color" value="yellow" checked><span class="sr-only">Yellow</span></label>
+              <label class="swatch n-green"><input type="radio" name="color" value="green"><span class="sr-only">Green</span></label>
+              <label class="swatch n-orange"><input type="radio" name="color" value="orange"><span class="sr-only">Orange</span></label>
+              <label class="swatch n-pink"><input type="radio" name="color" value="pink"><span class="sr-only">Pink</span></label>
+            </fieldset>
+            <span class="note-count" data-note-count>0 / 80</span>
+          </div>
+          <button type="submit" class="btn btn-cream">Stick it on the door</button>
+          <p class="note-status" role="status" data-note-status></p>
+        </form>
+      </div>
+      <div class="door-wrap" data-reveal>
+        <div class="door" aria-label="Notes on the door">
+          <ul class="door-notes" data-door-notes></ul>
+          <span class="door-handle" aria-hidden="true"></span>
+        </div>
+        <p class="door-hint">Psst… you can drag the notes around.</p>
+      </div>
+    </section>
+
+    <!-- MINI GAME -->
+    <section class="game" id="play" aria-labelledby="game-title">
+      <div class="game-copy" data-reveal>
+        <p class="kicker">Mini game</p>
+        <h2 id="game-title">Build the Scud.</h2>
+        <p class="muted">Catch strawberries, grapes, mango and ice cream in your cup before time runs out. Five catches in a row doubles your points. Watch out for the bees!</p>
+        <p class="game-prize" data-game-prize hidden></p>
+        <div class="board-wrap">
+          <h3 class="board-title">This week's top scorers</h3>
+          <ol class="board" data-board></ol>
+          <p class="board-note" data-board-note>Resets every Monday.</p>
+        </div>
+      </div>
+      <div class="game-stage" data-game-stage data-reveal>
+        <canvas data-game-canvas role="img" aria-label="Build the Scud game. Move the cup with your mouse, finger, or the arrow keys."></canvas>
+        <div class="game-hud" aria-hidden="true">
+          <span class="hud-chip">Score <strong data-score>0</strong></span>
+          <span class="hud-chip hud-combo" data-combo hidden></span>
+          <span class="hud-chip"><strong data-time>30</strong>s</span>
+        </div>
+        <div class="game-screen" data-game-start>
+          <p class="screen-kicker">30 seconds · 1 cup</p>
+          <p class="screen-title">Ready to build?</p>
+          <p class="screen-help">Drag, move your mouse, or use ← → to slide the cup.</p>
+          <button type="button" class="btn btn-dark" data-game-play>Play</button>
+        </div>
+        <div class="game-screen" data-game-over hidden>
+          <p class="screen-kicker">Your scud scored</p>
+          <p class="screen-score" data-final-score>0</p>
+          <p class="screen-help" data-best></p>
+          <form class="score-form" data-score-form>
+            <label for="score-name" class="sr-only">Your name</label>
+            <input id="score-name" name="name" maxlength="16" required placeholder="Your name" autocomplete="nickname">
+            <button type="submit" class="btn btn-dark">Add to the board</button>
+          </form>
+          <p class="screen-status" role="status" data-score-status></p>
+          <button type="button" class="btn btn-line-dark" data-game-play>Play again</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" aria-label="Inside Layali">
+      <img src="images/shopfront-night.jpg" alt="Layali at night: the lit IAYAli ليالي sign over the open counter window and a glowing backlit mirror" loading="lazy" class="g-wide" width="1100" height="1053" data-reveal>
+      <img src="images/sign-plants.jpg" alt="A backlit ليالي sign on the sandstone wall, with flowers, woven mats and potted plants" loading="lazy" width="900" height="846" data-reveal>
+      <img src="images/wall-art.jpg" alt="The gallery wall inside Layali: framed prints, a woven basket, blue and white plates and a red kilim" loading="lazy" width="1100" height="990" data-reveal>
+      <img src="images/baskets.jpg" alt="Woven baskets and an old lantern on the wall" loading="lazy" width="1100" height="1137" data-reveal>
+      <img src="images/shopfront.jpg" alt="The Layali sign above the door, with white flowers along the top" loading="lazy" width="1400" height="686" data-reveal>
+    </section>
+
+    <!-- VISIT -->
+    <section class="visit" id="visit" aria-labelledby="visit-title">
+      <div class="visit-copy" data-reveal>
+        <h2 id="visit-title">Come say hi.</h2>
+        <dl class="visit-list">
+          <div><dt>Find us</dt><dd>Magharibi Place<br>South C, Nairobi</dd></div>
+          <div><dt>Open</dt><dd>Every day<br>8:00am – 9:30pm</dd></div>
+          <!-- PLACEHOLDER: real WhatsApp number goes in script.js CONFIG and here -->
+          <div class="order-only"><dt>WhatsApp</dt><dd><a href="#" data-wa-link>+254 700 000 000</a></dd></div>
+          <div><dt>Instagram</dt><dd><a href="https://instagram.com/cafelayali.ke" target="_blank" rel="noopener">@cafelayali.ke</a></dd></div>
+        </dl>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="https://www.google.com/maps/search/?api=1&query=Magharibi+Place+South+C+Nairobi" target="_blank" rel="noopener">Get directions</a>
+          <button type="button" class="btn btn-line" data-open-order>Order on WhatsApp</button>
+        </div>
+      </div>
+      <div class="map" data-reveal>
+        <iframe title="Map showing Magharibi Place, South C, Nairobi" src="https://www.google.com/maps?q=Magharibi+Place,+South+C,+Nairobi&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="plates" aria-hidden="true">
+      <svg class="illus plate" viewBox="0 0 120 120"><use href="#i-plate"/></svg>
+      <svg class="illus plate" viewBox="0 0 120 120"><use href="#i-plate"/></svg>
+      <svg class="illus plate" viewBox="0 0 120 120"><use href="#i-plate"/></svg>
+    </div>
+    <svg class="logo footer-logo" viewBox="0 0 412 112" role="img" aria-label="Layali"><use href="#logo-wordmark"/></svg>
+    <span class="footer-ar" lang="ar">ليالي</span>
+    <p>Your favourite neighbourhood café · Magharibi Place, South C</p>
+    <p class="small">© <span data-year></span> Layali</p>
+  </footer>
+
+  <!-- Photo lightbox -->
+  <dialog class="lightbox" data-lightbox aria-label="Photo">
+    <img alt="" data-lightbox-img>
+    <button type="button" class="icon-btn lightbox-close" data-lightbox-close aria-label="Close photo">×</button>
+  </dialog>
+
+  <!-- ORDER BAR + DRAWER -->
+  <button type="button" class="order-bar" data-open-order hidden>
+    <span><strong data-order-count-bar>0</strong> items · KES <span data-order-total-bar>0</span></span>
+    <span>Review order →</span>
+  </button>
+
+  <div class="drawer-scrim" data-close-order hidden></div>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+    <div class="drawer-head">
+      <h2 id="drawer-title">Your order</h2>
+      <button type="button" class="icon-btn" data-close-order aria-label="Close order">×</button>
+    </div>
+    <ul class="order-list" data-order-list></ul>
+    <p class="order-empty" data-order-empty>Nothing here yet. Tap <span class="plus-demo">+</span> next to anything on the menu.</p>
+    <form class="order-form" data-order-form>
+      <div class="order-total"><span>Total</span><strong>KES <span data-order-total>0</span></strong></div>
+      <label>Your name <input type="text" name="name" autocomplete="given-name" placeholder="Optional"></label>
+      <fieldset>
+        <legend>How would you like it?</legend>
+        <label class="radio"><input type="radio" name="mode" value="Pick-up" checked> Pick-up</label>
+        <label class="radio"><input type="radio" name="mode" value="Delivery"> Delivery</label>
+      </fieldset>
+      <label>Notes <textarea name="notes" rows="2" placeholder="Less ice, extra sauce, delivery address…"></textarea></label>
+      <button type="submit" class="btn btn-wa">Send order on WhatsApp</button>
+      <p class="small muted">Opens WhatsApp with your order typed out. We'll confirm the total and the time.</p>
+    </form>
+  </aside>
+
+  <!-- ===========================================================
+       ILLUSTRATIONS: vintage-sketch symbols, reused with <use>.
+       Colours can be changed per use with --d1 / --d2 / --t.
+       Fills sit 3px off the ink lines for a hand-printed look.
+       =========================================================== -->
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <!-- ===== Shared pieces for the detailed signature drinks ===== -->
+    <defs>
+      <clipPath id="cup-clip"><path d="M50 54 L62 200 L138 200 L150 54 Z"/></clipPath>
+      <clipPath id="shake-clip"><path d="M52 84 L64 204 L136 204 L148 84 Z"/></clipPath>
+      <linearGradient id="g-coffee" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f3121"/><stop offset=".75" stop-color="#6b4430"/><stop offset="1" stop-color="#8a5d40"/></linearGradient>
+      <linearGradient id="g-milk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8f1e4"/><stop offset="1" stop-color="#ecdcc4"/></linearGradient>
+      <linearGradient id="g-matcha" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f9850"/><stop offset="1" stop-color="#a3b86f"/></linearGradient>
+      <linearGradient id="g-straw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4c6bd"/><stop offset="1" stop-color="#e58f87"/></linearGradient>
+      <linearGradient id="g-shake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8cfaa"/><stop offset="1" stop-color="#d2a877"/></linearGradient>
+      <linearGradient id="g-mango" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c260"/><stop offset="1" stop-color="#e89c34"/></linearGradient>
+      <!-- roundness: highlight on the left, shadow on the right -->
+      <linearGradient id="g-shade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".16" stop-color="#fff" stop-opacity=".12"/>
+        <stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#3b2f27" stop-opacity=".18"/>
+      </linearGradient>
+      <!-- condensation on the outside of iced cups -->
+      <g id="drops" fill="#fff" fill-opacity=".8" stroke="#3b2f27" stroke-opacity=".45" stroke-width="1.1">
+        <path d="M64 94 c-2.4 3.4 -3.6 6 0 7.2 c3.6 -1.2 2.4 -3.8 0 -7.2 z"/>
+        <path d="M70 128 c-2 3 -3 5 0 6 c3 -1 2 -3 0 -6 z"/>
+        <path d="M133 100 c-2.4 3.4 -3.6 6 0 7.2 c3.6 -1.2 2.4 -3.8 0 -7.2 z"/>
+        <path d="M127 148 c-2 3 -3 5 0 6 c3 -1 2 -3 0 -6 z"/>
+        <path d="M77 180 c-2.4 3.4 -3.6 6 0 7.2 c3.6 -1.2 2.4 -3.8 0 -7.2 z"/>
+        <path d="M121 184 c-2 3 -3 5 0 6 c3 -1 2 -3 0 -6 z"/>
+        <circle cx="140" cy="80" r="1.8"/><circle cx="60" cy="112" r="1.5"/><circle cx="96" cy="190" r="1.6"/><circle cx="136" cy="128" r="1.4"/>
+      </g>
+      <g id="drops-shake" fill="#fff" fill-opacity=".8" stroke="#3b2f27" stroke-opacity=".45" stroke-width="1.1">
+        <path d="M68 108 c-2.4 3.4 -3.6 6 0 7.2 c3.6 -1.2 2.4 -3.8 0 -7.2 z"/>
+        <path d="M132 122 c-2 3 -3 5 0 6 c3 -1 2 -3 0 -6 z"/>
+        <path d="M74 158 c-2 3 -3 5 0 6 c3 -1 2 -3 0 -6 z"/>
+        <path d="M126 174 c-2.4 3.4 -3.6 6 0 7.2 c3.6 -1.2 2.4 -3.8 0 -7.2 z"/>
+        <circle cx="84" cy="194" r="1.6"/><circle cx="138" cy="100" r="1.5"/><circle cx="62" cy="134" r="1.4"/>
+      </g>
+      <!-- see-through ice cubes (fill + ink drawn separately) -->
+      <g id="ice-fill" fill="#fff">
+        <rect x="70" y="66" width="24" height="22" rx="5" transform="rotate(-12 82 77)" fill-opacity=".42"/>
+        <rect x="104" y="78" width="22" height="20" rx="5" transform="rotate(10 115 88)" fill-opacity=".38"/>
+        <rect x="84" y="96" width="20" height="18" rx="4" transform="rotate(24 94 105)" fill-opacity=".3"/>
+      </g>
+      <g id="ice-ink" fill="none" stroke="#3b2f27" stroke-width="1.8" stroke-opacity=".7">
+        <rect x="70" y="66" width="24" height="22" rx="5" transform="rotate(-12 82 77)"/>
+        <rect x="104" y="78" width="22" height="20" rx="5" transform="rotate(10 115 88)"/>
+        <rect x="84" y="96" width="20" height="18" rx="4" transform="rotate(24 94 105)"/>
+        <path d="M75 70 l6 -1.2 M108 82 l5 1" stroke="#fff" stroke-opacity="1" stroke-width="2.4"/>
+      </g>
+      <g id="cocoa" fill="#5b3a26" fill-opacity=".75">
+        <circle cx="60" cy="60" r="1.6"/><circle cx="72" cy="58" r="1.3"/><circle cx="86" cy="61" r="1.7"/><circle cx="98" cy="58" r="1.3"/>
+        <circle cx="110" cy="62" r="1.6"/><circle cx="124" cy="59" r="1.4"/><circle cx="136" cy="61" r="1.7"/><circle cx="66" cy="66" r="1.2"/>
+        <circle cx="92" cy="65" r="1.4"/><circle cx="118" cy="66" r="1.2"/><circle cx="142" cy="64" r="1.3"/><circle cx="80" cy="63" r="1.1"/>
+        <circle cx="104" cy="63" r="1.5"/><circle cx="130" cy="66" r="1.1"/><circle cx="56" cy="64" r="1.2"/>
+      </g>
+      <g id="iced-outline" fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M44 44 L156 44 L154 54 L46 54 Z"/>
+        <path d="M50 54 L62 200 L138 200 L150 54"/>
+        <path d="M134 140 l7 -7 M132 156 l7 -7 M130 172 l7 -7 M128 188 l7 -7" stroke-width="1.6"/>
+      </g>
+    </defs>
+
+    <!-- Animated condensation (overlay, slides down on hover) -->
+    <symbol id="i-drip" viewBox="0 0 200 220">
+      <g fill="#fff" fill-opacity=".9" stroke="#3b2f27" stroke-opacity=".5" stroke-width="1.2">
+        <path d="M60 116 c-3 4.2 -4.5 7.5 0 9 c4.5 -1.5 3 -4.8 0 -9 z"/>
+        <path d="M137 146 c-3 4.2 -4.5 7.5 0 9 c4.5 -1.5 3 -4.8 0 -9 z"/>
+      </g>
+    </symbol>
+
+    <!-- Iced Caramel latte: caramel running down the inside, coffee swirling into milk -->
+    <symbol id="i-caramel" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <g clip-path="url(#cup-clip)">
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-milk)"/>
+          <path d="M40 54 H160 V110 C138 120 118 102 98 114 C80 124 60 106 40 116 Z" fill="url(#g-coffee)"/>
+          <path d="M52 120 C68 132 84 112 98 128 C112 144 128 122 146 134" fill="none" stroke="#7a4e33" stroke-opacity=".45" stroke-width="8" stroke-linecap="round"/>
+          <path d="M64 146 C78 138 92 156 110 146" fill="none" stroke="#7a4e33" stroke-opacity=".22" stroke-width="6" stroke-linecap="round"/>
+          <path d="M57 58 C62 92 54 124 61 168 M143 58 C138 98 146 134 138 176 M74 56 C79 78 73 96 78 112" fill="none" stroke="#d29548" stroke-width="4.5" stroke-linecap="round"/>
+          <use href="#ice-fill"/>
+          <path d="M112 54 L66 172" stroke="#3b2f27" stroke-opacity=".3" stroke-width="7"/>
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-shade)"/>
+        </g>
+        <path d="M44 44 L156 44 L154 54 L46 54 Z" fill="#efe6d4"/>
+      </g>
+      <path d="M112 50 L130 4" stroke="#3b2f27" stroke-width="8" stroke-linecap="round"/>
+      <use href="#iced-outline"/>
+      <use href="#ice-ink"/>
+      <use href="#drops"/>
+      <text x="100" y="168" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Iced Tiramisu latte: cream cap dusted with cocoa over coffee and milk -->
+    <symbol id="i-tiramisu" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <g clip-path="url(#cup-clip)">
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-milk)"/>
+          <path d="M40 92 H160 V132 C140 140 120 124 100 134 C80 144 60 128 40 136 Z" fill="url(#g-coffee)"/>
+          <path d="M54 140 C70 150 86 132 100 146 C114 160 130 140 146 150" fill="none" stroke="#7a4e33" stroke-opacity=".38" stroke-width="7" stroke-linecap="round"/>
+          <path d="M40 54 H160 V96 C140 90 120 102 100 94 C80 86 60 98 40 92 Z" fill="#f6ead6"/>
+          <path d="M54 78 C68 72 82 82 96 76 M104 84 C118 78 132 86 146 80" fill="none" stroke="#e2cfae" stroke-width="2.5" stroke-linecap="round"/>
+          <use href="#cocoa"/>
+          <rect x="102" y="104" width="20" height="18" rx="4" transform="rotate(14 112 113)" fill="#fff" fill-opacity=".35"/>
+          <path d="M112 54 L66 172" stroke="#3b2f27" stroke-opacity=".28" stroke-width="7"/>
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-shade)"/>
+        </g>
+        <path d="M44 44 L156 44 L154 54 L46 54 Z" fill="#efe6d4"/>
+      </g>
+      <path d="M112 50 L130 4" stroke="#3b2f27" stroke-width="8" stroke-linecap="round"/>
+      <use href="#iced-outline"/>
+      <g fill="none" stroke="#3b2f27" stroke-linecap="round">
+        <path d="M51 95 C70 88 82 100 100 97 C120 90 136 102 149 96" stroke-width="1.6" stroke-opacity=".6"/>
+        <rect x="102" y="104" width="20" height="18" rx="4" transform="rotate(14 112 113)" stroke-width="1.8" stroke-opacity=".7"/>
+      </g>
+      <use href="#drops"/>
+      <text x="100" y="178" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Matcha misu: ladyfinger on the lid, cocoa on cream, matcha over milk -->
+    <symbol id="i-matchamisu" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <g clip-path="url(#cup-clip)">
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-milk)"/>
+          <path d="M40 98 H160 V146 C140 154 120 138 100 148 C80 158 60 142 40 150 Z" fill="url(#g-matcha)"/>
+          <path d="M54 154 C70 164 86 146 100 160 C114 174 130 154 146 164" fill="none" stroke="#93a865" stroke-opacity=".45" stroke-width="7" stroke-linecap="round"/>
+          <path d="M40 54 H160 V102 C140 96 120 108 100 100 C80 92 60 104 40 98 Z" fill="#f6ead6"/>
+          <path d="M54 82 C68 76 82 86 96 80 M104 88 C118 82 132 90 146 84" fill="none" stroke="#e2cfae" stroke-width="2.5" stroke-linecap="round"/>
+          <use href="#cocoa"/>
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-shade)"/>
+        </g>
+        <path d="M44 44 L156 44 L154 54 L46 54 Z" fill="#efe6d4"/>
+        <rect x="36" y="22" width="128" height="22" rx="11" transform="rotate(-4 100 33)" fill="#d6a463"/>
+        <path d="M44 38 C80 42 120 40 158 30" stroke="#b9803f" stroke-width="4" stroke-linecap="round" fill="none" transform="rotate(-4 100 33)"/>
+      </g>
+      <use href="#iced-outline"/>
+      <g fill="none" stroke="#3b2f27" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M51 99 C70 92 82 104 100 101 C120 94 136 106 149 100" stroke-width="1.6" stroke-opacity=".6"/>
+        <rect x="36" y="22" width="128" height="22" rx="11" transform="rotate(-4 100 33)" stroke-width="3"/>
+        <g transform="rotate(-4 100 33)" stroke-width="2.6" stroke-opacity=".55"><path d="M52 29 h.1 M66 27 h.1 M80 30 h.1 M94 27 h.1 M108 30 h.1 M122 27 h.1 M136 30 h.1 M148 28 h.1 M59 34 h.1 M87 34 h.1 M115 34 h.1 M141 34 h.1"/></g>
+      </g>
+      <use href="#drops"/>
+      <text x="100" y="186" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Strawberry matcha: matcha floating on strawberry milk, fruit at the bottom -->
+    <symbol id="i-strawmatcha" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <g clip-path="url(#cup-clip)">
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-straw)"/>
+          <path d="M40 54 H160 V108 C140 118 120 100 100 112 C80 124 60 104 40 114 Z" fill="url(#g-matcha)"/>
+          <path d="M52 118 C68 130 84 112 98 126 C112 140 128 120 146 130" fill="none" stroke="#93a865" stroke-opacity=".4" stroke-width="7" stroke-linecap="round"/>
+          <path d="M62 170 C62 160 80 160 80 170 C80 180 71 190 71 190 C71 190 62 180 62 170 Z" fill="#c9554b"/>
+          <path d="M104 178 C104 168 122 168 122 178 C122 188 113 198 113 198 C113 198 104 188 104 178 Z" fill="#c9554b"/>
+          <path d="M122 158 C122 150 136 150 136 158 C136 166 129 174 129 174 C129 174 122 166 122 158 Z" fill="#d46a60"/>
+          <use href="#ice-fill"/>
+          <path d="M112 54 L66 172" stroke="#3b2f27" stroke-opacity=".28" stroke-width="7"/>
+          <rect x="40" y="54" width="120" height="150" fill="url(#g-shade)"/>
+        </g>
+        <path d="M44 44 L156 44 L154 54 L46 54 Z" fill="#efe6d4"/>
+      </g>
+      <path d="M112 50 L130 4" stroke="#3b2f27" stroke-width="8" stroke-linecap="round"/>
+      <use href="#iced-outline"/>
+      <use href="#ice-ink"/>
+      <g fill="none" stroke="#3b2f27" stroke-width="1.8" stroke-linecap="round" stroke-opacity=".75">
+        <path d="M62 170 C62 160 80 160 80 170 C80 180 71 190 71 190 C71 190 62 180 62 170 Z"/>
+        <path d="M104 178 C104 168 122 168 122 178 C122 188 113 198 113 198 C113 198 104 188 104 178 Z"/>
+        <path d="M122 158 C122 150 136 150 136 158 C136 166 129 174 129 174 C129 174 122 166 122 158 Z"/>
+        <path d="M68 168 h.1 M74 174 h.1 M110 176 h.1 M116 182 h.1 M128 158 h.1" stroke="#f6e6a8" stroke-opacity="1" stroke-width="2.4"/>
+      </g>
+      <use href="#drops"/>
+      <text x="100" y="152" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Lotus Biscoff shake: biscuit in the cream, crumbs, caramel inside the cup -->
+    <symbol id="i-lotus" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <g clip-path="url(#shake-clip)">
+          <rect x="40" y="84" width="120" height="124" fill="url(#g-shake)"/>
+          <path d="M58 88 C62 120 56 150 62 190 M142 88 C138 124 146 156 138 196 M76 88 C80 108 74 124 79 140" fill="none" stroke="#9a5f2a" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M100 84 L137 170" stroke="#3b2f27" stroke-opacity=".28" stroke-width="7"/>
+          <rect x="40" y="84" width="120" height="124" fill="url(#g-shade)"/>
+        </g>
+        <path d="M46 86 C44 56 74 42 100 42 C126 42 156 56 154 86 Z" fill="#fbf4e6"/>
+        <path d="M52 84 q8 14 16 0 q8 14 16 0 q8 14 16 0 q8 14 16 0 q8 14 16 0 q8 14 16 0" fill="none" stroke="#9a5f2a" stroke-width="4.5" stroke-linecap="round"/>
+        <g fill="#b9803f"><circle cx="70" cy="62" r="2.6"/><rect x="82" y="51" width="5" height="4" rx="1"/><circle cx="96" cy="66" r="2.2"/><rect x="110" y="56" width="5" height="4" rx="1" transform="rotate(20 112 58)"/><circle cx="78" cy="74" r="2"/><circle cx="136" cy="74" r="2.4"/><circle cx="104" cy="76" r="1.8"/><circle cx="62" cy="78" r="1.6"/></g>
+        <rect x="104" y="16" width="42" height="28" rx="4" transform="rotate(18 125 30)" fill="#c98a45"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M84 46 L66 4" stroke-width="8"/>
+        <path d="M46 86 C44 56 74 42 100 42 C126 42 156 56 154 86 Z"/>
+        <path d="M60 72 C76 62 96 64 108 70 M72 56 C84 50 96 50 104 54" stroke-width="2"/>
+        <path d="M52 86 L64 204 L136 204 L148 86"/>
+        <rect x="104" y="16" width="42" height="28" rx="4" transform="rotate(18 125 30)"/>
+        <g transform="rotate(18 125 30)" stroke-width="2.2"><path d="M109 21 h.1 M117 21 h.1 M125 21 h.1 M133 21 h.1 M141 21 h.1 M109 39 h.1 M117 39 h.1 M125 39 h.1 M133 39 h.1 M141 39 h.1"/><path d="M114 30 c3 -4 6 4 9 0 s6 4 9 0 s5 3 7 0" stroke-width="1.6"/></g>
+        <path d="M134 150 l7 -7 M132 166 l7 -7 M130 182 l7 -7" stroke-width="1.6"/>
+      </g>
+      <use href="#drops-shake"/>
+      <text x="100" y="160" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Layali wordmark, redrawn from the shop sign. Uses currentColor. -->
+    <symbol id="logo-wordmark" viewBox="0 0 412 112">
+      <g fill="none" stroke="currentColor" stroke-width="16">
+        <path d="M12 10 V110"/>
+        <path d="M39 110 V51.5 A41.5 41.5 0 0 1 122 51.5 V110"/>
+        <path d="M61 59 H98"/>
+        <path d="M152.5 10 V22.5 A31.5 31.5 0 0 0 215.5 22.5 V10 M184 54 V110"/>
+        <path d="M241 110 V51.5 A41.5 41.5 0 0 1 324 51.5 V110"/>
+        <path d="M263 59 H300"/>
+        <path d="M365.5 0 V110"/>
+        <path d="M399.5 27 V110"/>
+      </g>
+      <circle cx="399.5" cy="10" r="9" fill="currentColor"/>
+    </symbol>
+
+    <!-- Iced latte cup: --d1 top layer, --d2 bottom layer -->
+    <symbol id="i-iced" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <path d="M51 62 L149 62 L144.6 117 C120 126 95 108 55.4 121 Z" style="fill:var(--d1,#6b4430)"/>
+        <path d="M55.4 121 C95 108 120 126 144.6 117 L138 200 L62 200 Z" style="fill:var(--d2,#f6efe2)"/>
+        <path d="M44 44 L156 44 L154 54 L46 54 Z" fill="#efe6d4"/>
+        <path d="M60 74 L66 186" stroke="#fff" stroke-opacity=".55" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M112 50 L130 4" stroke-width="8"/>
+        <path d="M44 44 L156 44 L154 54 L46 54 Z"/>
+        <path d="M50 54 L62 200 L138 200 L150 54"/>
+        <path d="M55.4 121 C95 108 120 126 144.6 117" stroke-width="2"/>
+        <rect x="70" y="70" width="22" height="20" rx="4" transform="rotate(-12 81 80)" stroke-width="2"/>
+        <rect x="104" y="80" width="20" height="18" rx="4" transform="rotate(10 114 89)" stroke-width="2"/>
+        <path d="M134 140 l7 -7 M132 156 l7 -7 M130 172 l7 -7 M128 188 l7 -7" stroke-width="1.6"/>
+      </g>
+      <text x="100" y="164" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Milkshake: --d1 shake colour, --t topping/drizzle -->
+    <symbol id="i-shake" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <path d="M52 84 L148 84 L136 204 L64 204 Z" style="fill:var(--d1,#f2d9c4)"/>
+        <path d="M46 86 C44 56 74 42 100 42 C126 42 156 56 154 86 Z" fill="#fbf4e6"/>
+        <path d="M52 84 q8 14 16 0 q8 14 16 0 q8 14 16 0 q8 14 16 0 q8 14 16 0 q8 14 16 0" fill="none" style="stroke:var(--t,#8a5530)" stroke-width="5" stroke-linecap="round"/>
+        <ellipse cx="100" cy="38" rx="14" ry="11" style="fill:var(--t,#8a5530)"/>
+        <path d="M60 96 L67 192" stroke="#fff" stroke-opacity=".5" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M120 46 L138 4" stroke-width="8"/>
+        <path d="M46 86 C44 56 74 42 100 42 C126 42 156 56 154 86 Z"/>
+        <path d="M62 72 C80 62 120 62 138 72 M76 56 C90 50 110 50 124 56" stroke-width="2"/>
+        <ellipse cx="100" cy="38" rx="14" ry="11"/>
+        <path d="M52 86 L64 204 L136 204 L148 86"/>
+        <path d="M134 150 l7 -7 M132 166 l7 -7 M130 182 l7 -7" stroke-width="1.6"/>
+      </g>
+      <text x="100" y="156" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="600" font-size="17" letter-spacing="2" fill="#3b2f27">layali</text>
+    </symbol>
+
+    <!-- Hot takeaway cup (like the printed menu icons): --d1 sleeve, --lid -->
+    <symbol id="i-hot" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <path d="M56 74 L144 74 L132 204 L68 204 Z" fill="#f3e7cf"/>
+        <path d="M59.3 110 L140.7 110 L136.3 158 L63.7 158 Z" style="fill:var(--d1,#c08a4a)"/>
+        <ellipse cx="100" cy="134" rx="22" ry="12" fill="#fbf4e6"/>
+        <path d="M50 60 L150 60 L152 74 L48 74 Z" style="fill:var(--lid,#5a4234)"/>
+        <path d="M62 60 L67 46 L133 46 L138 60 Z" style="fill:var(--lid,#5a4234)"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M56 74 L68 204 L132 204 L144 74"/>
+        <path d="M59.3 110 L140.7 110 M63.7 158 L136.3 158"/>
+        <ellipse cx="100" cy="134" rx="22" ry="12" stroke-width="2"/>
+        <path d="M50 60 L150 60 L152 74 L48 74 Z"/>
+        <path d="M62 60 L67 46 L133 46 L138 60"/>
+        <path d="M128 176 l7 -7 M127 190 l7 -7 M132 88 l7 -7 M131 100 l7 -7" stroke-width="1.6"/>
+      </g>
+    </symbol>
+    <symbol id="i-steam" viewBox="0 0 200 220">
+      <g fill="none" stroke="#3b2f27" stroke-opacity=".45" stroke-width="3.5" stroke-linecap="round">
+        <path d="M84 40 C72 28 96 20 84 4"/>
+        <path d="M100 38 C88 24 112 16 100 0"/>
+        <path d="M116 40 C104 28 128 20 116 4"/>
+      </g>
+    </symbol>
+
+    <!-- Waffle, top view: --t drizzle, --b biscuit -->
+    <symbol id="i-waffle" viewBox="0 0 200 200">
+      <clipPath id="waffle-clip"><circle cx="100" cy="100" r="78"/></clipPath>
+      <g transform="translate(3 3)">
+        <circle cx="100" cy="100" r="80" fill="#d9a35b"/>
+        <g clip-path="url(#waffle-clip)" stroke="#b9803f" stroke-width="6">
+          <path d="M40 20 V180 M60 20 V180 M80 20 V180 M100 20 V180 M120 20 V180 M140 20 V180 M160 20 V180"/>
+          <path d="M20 40 H180 M20 60 H180 M20 80 H180 M20 100 H180 M20 120 H180 M20 140 H180 M20 160 H180"/>
+        </g>
+        <path d="M40 70 C70 92 88 50 120 75 S158 80 170 96 M34 112 C64 132 100 96 130 122 S160 126 168 132 M50 150 C80 160 110 140 150 156" fill="none" style="stroke:var(--t,#7a4a26)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M78 104 C74 88 90 78 100 84 C110 74 126 86 122 102 C128 112 112 122 100 116 C88 124 72 116 78 104 Z" fill="#fbf4e6"/>
+        <rect x="98" y="62" width="44" height="24" rx="4" transform="rotate(-18 120 74)" style="fill:var(--b,#c98a45)"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="100" cy="100" r="80"/>
+        <circle cx="100" cy="100" r="70" stroke-width="1.5"/>
+        <path d="M78 104 C74 88 90 78 100 84 C110 74 126 86 122 102 C128 112 112 122 100 116 C88 124 72 116 78 104 Z"/>
+        <path d="M88 96 C94 92 104 92 110 98" stroke-width="1.6"/>
+        <rect x="98" y="62" width="44" height="24" rx="4" transform="rotate(-18 120 74)"/>
+        <g transform="rotate(-18 120 74)" stroke-width="2.4"><path d="M106 70 h0.1 M114 70 h0.1 M122 70 h0.1 M130 70 h0.1 M106 78 h0.1 M114 78 h0.1 M122 78 h0.1 M130 78 h0.1"/></g>
+        <path d="M152 140 l8 -6 M146 152 l8 -6 M136 162 l8 -6" stroke-width="1.6"/>
+      </g>
+    </symbol>
+
+    <!-- Scud: strawberries, grapes and ice cream on a mango base -->
+    <symbol id="i-scud" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <path d="M58.3 158 L141.7 158 L138 200 L62 200 Z" fill="url(#g-mango)"/>
+        <path d="M50.9 72 L149.1 72 L141.7 158 L58.3 158 Z" fill="#f8efdf"/>
+        <path d="M68 112 C68 98 94 98 94 112 C94 126 81 140 81 140 C81 140 68 126 68 112 Z" fill="#d27466"/>
+        <path d="M106 130 C106 116 132 116 132 130 C132 144 119 158 119 158 C119 158 106 144 106 130 Z" fill="#d27466"/>
+        <circle cx="114" cy="96" r="8" fill="#b9c46a"/><circle cx="128" cy="104" r="8" fill="#8e6a9a"/>
+        <circle cx="76" cy="150" r="8" fill="#8e6a9a"/><circle cx="96" cy="146" r="8" fill="#b9c46a"/>
+        <path d="M50.9 64 L149.1 64 L138 200 L62 200 Z" fill="url(#g-shade)"/>
+        <path d="M54 66 C54 30 146 30 146 66 Z" fill="#fbf4e6"/>
+        <path d="M90 30 C90 16 112 16 112 30 C112 42 101 52 101 52 C101 52 90 42 90 30 Z" fill="#d27466"/>
+        <path d="M94 18 L101 24 L108 18" fill="#7a9a5a"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M50 62 L62 200 L138 200 L150 62"/>
+        <path d="M58.3 158 C80 152 120 164 141.7 158" stroke-width="2"/>
+        <path d="M54 66 C54 30 146 30 146 66 Z"/>
+        <path d="M70 66 q4 10 8 0 M120 66 q4 12 8 0" stroke-width="2"/>
+        <path d="M90 30 C90 16 112 16 112 30 C112 42 101 52 101 52 C101 52 90 42 90 30 Z" stroke-width="2.4"/>
+        <path d="M94 18 L101 24 L108 18" stroke-width="2"/>
+        <path d="M68 112 C68 98 94 98 94 112 C94 126 81 140 81 140 C81 140 68 126 68 112 Z" stroke-width="2.4"/>
+        <path d="M106 130 C106 116 132 116 132 130 C132 144 119 158 119 158 C119 158 106 144 106 130 Z" stroke-width="2.4"/>
+        <circle cx="114" cy="96" r="8" stroke-width="2"/><circle cx="128" cy="104" r="8" stroke-width="2"/>
+        <circle cx="76" cy="150" r="8" stroke-width="2"/><circle cx="96" cy="146" r="8" stroke-width="2"/>
+        <path d="M76 110 h.1 M84 116 h.1 M80 124 h.1 M114 128 h.1 M122 134 h.1 M118 142 h.1" stroke="#f6e6a8" stroke-width="3"/>
+        <path d="M136 172 l6 -6 M134 186 l6 -6" stroke-width="1.6"/>
+      </g>
+      <use href="#drops"/>
+    </symbol>
+
+    <!-- Smoothie bowl: --d1 base colour -->
+    <symbol id="i-bowl" viewBox="0 0 200 160">
+      <g transform="translate(3 3)">
+        <path d="M18 72 L182 72 C178 122 142 150 100 150 C58 150 22 122 18 72 Z" fill="#f6f1e6"/>
+        <path d="M21 88 L179 88 C178 94 177 98 175 102 L25 102 C23 98 22 94 21 88 Z" fill="#3b5a9a"/>
+        <path d="M22 72 C34 40 166 40 178 72 Z" style="fill:var(--d1,#c79a5e)"/>
+        <circle cx="62" cy="58" r="10" fill="#f6e6a8"/><circle cx="84" cy="50" r="10" fill="#f6e6a8"/><circle cx="106" cy="55" r="10" fill="#f6e6a8"/>
+        <path d="M122 54 C118 42 142 40 144 54 C152 58 148 68 138 66 C128 70 118 64 122 54 Z" fill="#fbf4e6"/>
+        <ellipse cx="44" cy="66" rx="5" ry="3" fill="#9a6a3a"/><ellipse cx="156" cy="66" rx="5" ry="3" fill="#9a6a3a"/><ellipse cx="128" cy="46" rx="4" ry="3" fill="#9a6a3a"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 72 L182 72 C178 122 142 150 100 150 C58 150 22 122 18 72 Z"/>
+        <path d="M21 88 L179 88 M25 102 L175 102" stroke-width="2"/>
+        <path d="M22 72 C34 40 166 40 178 72"/>
+        <circle cx="62" cy="58" r="10" stroke-width="2"/><circle cx="84" cy="50" r="10" stroke-width="2"/><circle cx="106" cy="55" r="10" stroke-width="2"/>
+        <path d="M62 58 h.1 M84 50 h.1 M106 55 h.1" stroke-width="3"/>
+        <path d="M122 54 C118 42 142 40 144 54 C152 58 148 68 138 66 C128 70 118 64 122 54 Z" stroke-width="2.4"/>
+        <path d="M60 120 h.1 M80 124 h.1 M100 126 h.1 M120 124 h.1 M140 120 h.1" stroke="#3b5a9a" stroke-width="6"/>
+      </g>
+    </symbol>
+
+    <!-- Mojito: --d1 drink colour, --t berries (transparent by default) -->
+    <symbol id="i-mojito" viewBox="0 0 200 220">
+      <g transform="translate(3 3)">
+        <path d="M59 70 L141 70 L134 204 L66 204 Z" style="fill:var(--d1,#d4e6bf)"/>
+        <ellipse cx="86" cy="150" rx="8" ry="15" transform="rotate(-30 86 150)" fill="#6f9a5a"/>
+        <ellipse cx="114" cy="172" rx="8" ry="15" transform="rotate(35 114 172)" fill="#6f9a5a"/>
+        <ellipse cx="100" cy="118" rx="7" ry="13" transform="rotate(10 100 118)" fill="#6f9a5a"/>
+        <circle cx="86" cy="188" r="7" style="fill:var(--t,transparent)"/><circle cx="104" cy="192" r="7" style="fill:var(--t,transparent)"/>
+        <circle cx="140" cy="54" r="22" fill="#c9d86a"/>
+        <circle cx="140" cy="54" r="16" fill="#e4ecaa"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M116 66 L148 4" stroke-width="8"/>
+        <path d="M58 48 L66 204 L134 204 L142 48"/>
+        <path d="M59 70 C80 66 120 74 141 70" stroke-width="2"/>
+        <rect x="70" y="80" width="22" height="20" rx="4" transform="rotate(-12 81 90)" stroke-width="2"/>
+        <rect x="104" y="92" width="20" height="18" rx="4" transform="rotate(14 114 101)" stroke-width="2"/>
+        <ellipse cx="86" cy="150" rx="8" ry="15" transform="rotate(-30 86 150)" stroke-width="2"/>
+        <ellipse cx="114" cy="172" rx="8" ry="15" transform="rotate(35 114 172)" stroke-width="2"/>
+        <ellipse cx="100" cy="118" rx="7" ry="13" transform="rotate(10 100 118)" stroke-width="2"/>
+        <circle cx="140" cy="54" r="22"/>
+        <path d="M140 38 V70 M126 46 L154 62 M126 62 L154 46" stroke-width="1.6"/>
+        <path d="M128 176 l6 -6 M127 190 l6 -6" stroke-width="1.6"/>
+      </g>
+    </symbol>
+
+    <!-- Hanging lantern: --glass and --flame light up at night -->
+    <symbol id="i-lantern" viewBox="0 0 120 200">
+      <g transform="translate(2 2)">
+        <path d="M40 50 C28 76 28 120 40 146 L80 146 C92 120 92 76 80 50 Z" style="fill:var(--glass,#efe6d4)"/>
+        <path d="M60 84 C50 100 52 116 60 122 C68 116 70 100 60 84 Z" style="fill:var(--flame,#d9a05b)"/>
+        <path d="M38 50 L82 50 L74 32 L46 32 Z" fill="#3b2f27"/>
+        <rect x="32" y="146" width="56" height="18" rx="4" fill="#3b2f27"/>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="60" cy="16" r="8"/>
+        <path d="M60 24 V32"/>
+        <path d="M38 50 L82 50 L74 32 L46 32 Z"/>
+        <path d="M40 50 C28 76 28 120 40 146 L80 146 C92 120 92 76 80 50"/>
+        <path d="M48 50 L46 146 M72 50 L74 146" stroke-width="2"/>
+        <path d="M60 84 C50 100 52 116 60 122 C68 116 70 100 60 84 Z" stroke-width="1.8"/>
+        <rect x="32" y="146" width="56" height="18" rx="4"/>
+        <path d="M34 60 C12 90 12 124 36 142" stroke-width="2.4"/>
+      </g>
+    </symbol>
+
+    <!-- Date palm -->
+    <symbol id="i-palm" viewBox="0 0 160 220">
+      <g transform="translate(3 3)">
+        <path d="M72 214 C80 160 70 110 78 60 L88 60 C82 110 92 160 86 214 Z" fill="#a07a52"/>
+        <g fill="#7d8f5a">
+          <path d="M82 58 C60 30 28 30 8 50 C32 42 58 46 82 62 Z"/>
+          <path d="M84 58 C106 30 138 30 156 50 C132 42 108 46 84 62 Z"/>
+          <path d="M82 58 C70 30 76 10 92 2 C86 22 88 40 86 60 Z"/>
+          <path d="M80 62 C60 62 34 76 24 100 C44 80 62 72 82 66 Z"/>
+          <path d="M86 62 C106 62 132 76 142 100 C122 80 104 72 84 66 Z"/>
+        </g>
+        <g fill="#8a4a2a"><circle cx="76" cy="70" r="5"/><circle cx="85" cy="73" r="5"/><circle cx="80" cy="80" r="5"/><circle cx="90" cy="68" r="5"/></g>
+      </g>
+      <g fill="none" stroke="#3b2f27" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M72 214 C80 160 70 110 78 60 M88 60 C82 110 92 160 86 214"/>
+        <path d="M76 80 l10 2 M75 100 l10 2 M76 120 l10 2 M78 140 l10 2 M80 160 l9 2 M81 180 l9 2 M82 200 l8 2" stroke-width="1.8"/>
+        <path d="M82 58 C60 30 28 30 8 50 C32 42 58 46 82 62"/>
+        <path d="M84 58 C106 30 138 30 156 50 C132 42 108 46 84 62"/>
+        <path d="M82 58 C70 30 76 10 92 2 C86 22 88 40 86 60"/>
+        <path d="M80 62 C60 62 34 76 24 100 C44 80 62 72 82 66"/>
+        <path d="M86 62 C106 62 132 76 142 100 C122 80 104 72 84 66"/>
+        <path d="M30 44 l4 6 M46 38 l3 7 M62 40 l2 7 M130 44 l-4 6 M114 38 l-3 7 M98 40 l-2 7" stroke-width="1.4"/>
+      </g>
+    </symbol>
+
+    <!-- Blue and white plate -->
+    <symbol id="i-plate" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="56" fill="#f8f4ea" stroke="#3b2f27" stroke-width="2"/>
+      <circle cx="60" cy="60" r="46" fill="none" stroke="#3b5a9a" stroke-width="5"/>
+      <circle cx="60" cy="60" r="39" fill="none" stroke="#3b5a9a" stroke-width="1.5"/>
+      <g fill="#3b5a9a">
+        <ellipse cx="60" cy="45" rx="6" ry="12"/>
+        <ellipse cx="60" cy="45" rx="6" ry="12" transform="rotate(60 60 60)"/>
+        <ellipse cx="60" cy="45" rx="6" ry="12" transform="rotate(120 60 60)"/>
+        <ellipse cx="60" cy="45" rx="6" ry="12" transform="rotate(180 60 60)"/>
+        <ellipse cx="60" cy="45" rx="6" ry="12" transform="rotate(240 60 60)"/>
+        <ellipse cx="60" cy="45" rx="6" ry="12" transform="rotate(300 60 60)"/>
+        <circle cx="111" cy="60" r="2.5"/><circle cx="104.2" cy="85.5" r="2.5"/><circle cx="85.5" cy="104.2" r="2.5"/>
+        <circle cx="60" cy="111" r="2.5"/><circle cx="34.5" cy="104.2" r="2.5"/><circle cx="15.8" cy="85.5" r="2.5"/>
+        <circle cx="9" cy="60" r="2.5"/><circle cx="15.8" cy="34.5" r="2.5"/><circle cx="34.5" cy="15.8" r="2.5"/>
+        <circle cx="60" cy="9" r="2.5"/><circle cx="85.5" cy="15.8" r="2.5"/><circle cx="104.2" cy="34.5" r="2.5"/>
+      </g>
+      <circle cx="60" cy="60" r="6" fill="#f8f4ea" stroke="#3b5a9a" stroke-width="2"/>
+    </symbol>
+  </svg>
+
+  <script src="script.js?v=7"></script>
+</body>
+</html>
